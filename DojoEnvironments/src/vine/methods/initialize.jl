@@ -18,7 +18,7 @@ function get_vine(;
 
     # Links
     origin = Origin{T}()
-    bodies = [Box(r, r, len[i], mass[i], color=RGBA(1.0, 0.0, 0.0)) for i = 1:num_bodies]
+    bodies = [Capsule(r, len[i], mass[i], color=RGBA(0.0, 0.0, 1.0)) for i = 1:num_bodies]
 
     # Constraints
     jointb1 = JointConstraint(Prototype(basetype, origin, bodies[1], ex;

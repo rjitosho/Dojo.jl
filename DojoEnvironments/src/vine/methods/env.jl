@@ -13,6 +13,7 @@ function vine(;
     len=ones(5), 
     damper=zeros(5), 
     spring=zeros(5),
+    control_map=ones(5),
     seed=1, 
     vis=Visualizer(), 
     name=:robot,
@@ -35,11 +36,11 @@ function vine(;
     elseif representation == :maximal
         nx = maximal_dimension(mechanism)
     end
-    nu = input_dimension(mechanism)
+    nu = 1
     no = nx
 
     high = [1.0, 1.0, max_speed]
-    aspace = BoxSpace(input_dimension(mechanism), 
+    aspace = BoxSpace(nu, 
         low=[-timestep * max_torque], 
         high=[timestep * max_torque])
     ospace = BoxSpace(no, 
@@ -52,8 +53,6 @@ function vine(;
     fu = zeros(nx, nu)
 
     u_prev = Inf * ones(nu)
-    control_mask = Diagonal(ones(nu)) #[ones(5,1) zeros(5,4)]
-    control_scaling = Diagonal(ones(nu))
     build_robot(mechanism,
         vis=vis, 
         name=name)
@@ -63,9 +62,21 @@ function vine(;
     TYPES = [T, typeof(mechanism), typeof(aspace), typeof(ospace), typeof(info)]
     env = Environment{Vine, TYPES...}(mechanism, representation, aspace, ospace,
         x, fx, fu,
-        u_prev, control_mask' * control_scaling, nx, nu, no, info,
+        u_prev, control_map, nx, nu, no, info,
         rng, vis, opts_step, opts_grad)
     return env
+end
+
+function visualize(env::Environment{Vine}, traj::Vector{Vector{T}}; 
+    axis=true, 
+    grid=true) where T
+
+	@assert size(traj[1]) == size(env.state)
+    storage = generate_storage(env.mechanism, [env.representation == :minimal ? minimal_to_maximal(env.mechanism, x) : x for x in traj])
+    Dojo.visualize(env.mechanism, storage, vis=env.vis)
+    
+    set_floor!(env.vis; color=RGBA(0.5,0.5,0.5,0.0),axis=axis,grid=grid)
+    set_camera!(env.vis, zoom=1.0, cam_pos=[1,0,0])
 end
 
 # function Base.reset(env::Environment{Vine}; 
