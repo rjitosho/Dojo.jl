@@ -127,7 +127,7 @@ mutable struct Cylinder{T} <: Shape{T}
             name::Symbol=Symbol("body_" * randstring(4)), 
             color=RGBA(0.75, 0.75, 0.75))
         T = promote_type(quateltype.((r, h, m, position_offset, orientation_offset))...)
-        J = 1 / 2 * m * diagm([r^2 + 1 / 6 * h^2; r^2 + 1 / 6 * h^2; r^2])
+        J = 1 / 2 * m * diagm([1 / 2 * r^2 + 1 / 6 * h^2; 1 / 2 * r^2 + 1 / 6 * h^2; r^2])
         return Body(m, J; name=name, shape=new{T}(position_offset, orientation_offset, [r;h], scale, color))
     end
 end
@@ -180,6 +180,46 @@ mutable struct Capsule{T} <: Shape{T}
         J = m * diagm([Ixx; Ixx; Izz])
 
         return Body(m, J; name=name, shape=new{T}(position_offset, orientation_offset, [r; h], scale, color))
+    end
+end
+
+"""
+    Shell{T} <: Shape{T}
+
+    cylindrical shell geometry 
+    
+    position_offset: geometry origin offset from center of mass
+    orientation_offset: orientation offset from body frame
+    rh: radius and height dimensions (meters)
+    scale: scaling
+    color: RGBA
+"""
+mutable struct Shell{T} <: Shape{T}
+    position_offset::SVector{3,T}
+    orientation_offset::Quaternion{T}
+    rh::SVector{2,T}
+    scale::SVector{3,T}
+    color::RGBA
+
+    # Cylindrical shell points in the z direction
+    function Shell(r::Real, h::Real;
+            position_offset::AbstractVector=szeros(3), 
+            orientation_offset::Quaternion=one(Quaternion),
+            scale::AbstractVector=sones(3), 
+            color=RGBA(0.75, 0.75, 0.75))
+        T = promote_type(quateltype.((r, h, position_offset, orientation_offset))...)
+        new{T}(position_offset, orientation_offset, [r;h], scale, color)
+    end
+
+    function Shell(r::Real, h::Real, m::Real;
+            position_offset::AbstractVector=szeros(3), 
+            orientation_offset::Quaternion=one(Quaternion),
+            scale::AbstractVector=sones(3), 
+            name::Symbol=Symbol("body_" * randstring(4)), 
+            color=RGBA(0.75, 0.75, 0.75))
+        T = promote_type(quateltype.((r, h, m, position_offset, orientation_offset))...)
+        J = 1 / 2 * m * diagm([r^2 + 1 / 6 * h^2; r^2 + 1 / 6 * h^2; 2 * r^2])
+        return Body(m, J; name=name, shape=new{T}(position_offset, orientation_offset, [r;h], scale, color))
     end
 end
 
@@ -315,6 +355,11 @@ end
 
 function convert_shape(cylinder::Cylinder)
     r, h = Tuple(cylinder.rh)
+    return GeometryBasics.Cylinder(Point(0.0, 0.0, -h / 2.0),Point(0.0, 0.0, h / 2.0), r)
+end
+
+function convert_shape(shell::Shell)
+    r, h = Tuple(shell.rh)
     return GeometryBasics.Cylinder(Point(0.0, 0.0, -h / 2.0),Point(0.0, 0.0, h / 2.0), r)
 end
 

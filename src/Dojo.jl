@@ -168,6 +168,7 @@ export
     Box,
     Capsule,
     Cylinder,
+    Shell,
     Sphere,
     Pyramid,
     Mesh,

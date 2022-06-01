@@ -7,18 +7,19 @@ function get_vine(;
     damper=zeros(5),
     basetype=:Revolute,
     joint_type=:Revolute,
+    shape=["shell", "shell", "shell", "shell", "cylinder"],
     T=Float64)
 
     # Parameters
     num_bodies = length(mass)
     ex = [1.0; 0.0; 0.0]
-    r = 0.05
+    r = 0.0381
     vert11 = [[0.0; 0.0; l / 2.0] for l in len]
     vert12 = [-v for v in vert11]
 
     # Links
     origin = Origin{T}()
-    bodies = [Capsule(r, len[i], mass[i], color=RGBA(0.0, 0.0, 1.0)) for i = 1:num_bodies]
+    bodies = [shape[i] == "shell" ? Shell(r, len[i], mass[i], color=RGBA(0.0, 0.0, 1.0)) : Cylinder(r, len[i], mass[i], color=RGBA(0.0, 0.0, 1.0)) for i = 1:num_bodies]
 
     # Constraints
     jointb1 = JointConstraint(Prototype(basetype, origin, bodies[1], ex;
