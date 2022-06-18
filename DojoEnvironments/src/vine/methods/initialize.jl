@@ -4,6 +4,7 @@ function get_vine(;
     mass=ones(5),
     len=ones(5),
     spring=zeros(5),
+    spring_offset=zeros(5),
     damper=zeros(5),
     basetype=:Revolute,
     joint_type=:Revolute,
@@ -25,12 +26,14 @@ function get_vine(;
     jointb1 = JointConstraint(Prototype(basetype, origin, bodies[1], ex;
         child_vertex=vert11[1],
         spring=spring[1],
+        rot_spring_offset=SVector(spring_offset[1]),
         damper=damper[1]))
     if num_bodies > 1
         joints = [JointConstraint(Prototype(joint_type, bodies[i - 1], bodies[i], ex;
             parent_vertex=vert12[i], # TODO: does vert12 need to be indexed differently
             child_vertex=vert11[i],
             spring=spring[i],
+            rot_spring_offset=SVector(spring_offset[i]),
             damper=damper[i])) for i = 2:num_bodies]
         joints = [jointb1; joints]
     else

@@ -13,6 +13,7 @@ function vine(;
     len=ones(5), 
     damper=zeros(5), 
     spring=zeros(5),
+    spring_offset=zeros(5),
     control_map=ones(5),
     seed=1, 
     vis=Visualizer(), 
@@ -27,7 +28,8 @@ function vine(;
         mass=mass, 
         len=len, 
         damper=damper,
-        spring=spring)
+        spring=spring,
+        spring_offset=spring_offset)
 
     initialize!(mechanism, :vine)
 
