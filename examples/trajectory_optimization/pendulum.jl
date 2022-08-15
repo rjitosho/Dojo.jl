@@ -544,10 +544,10 @@ end
 
 
 
-rosrun unitree_controller unitree_servo # let the robot stretch legs
-rosrun unitree_controller unitree_move_kinetic # place the robot back to origin
+# rosrun unitree_controller unitree_servo # let the robot stretch legs
+# rosrun unitree_controller unitree_move_kinetic # place the robot back to origin
 
-roslaunch unitree_gazebo normal.launch rname:=a1 wname:=stairs_new
+# roslaunch unitree_gazebo normal.launch rname:=a1 wname:=stairs_new
 
 
 
