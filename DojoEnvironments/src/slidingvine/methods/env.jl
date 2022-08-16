@@ -80,7 +80,7 @@ function visualize(env::Environment{SlidingVine}, traj::Vector{Vector{T}};
     Dojo.visualize(env.mechanism, storage, vis=env.vis)
     
     set_floor!(env.vis; color=RGBA(0.5,0.5,0.5,0.0),axis=axis,grid=grid)
-    set_camera!(env.vis, zoom=1.0, cam_pos=[1,.5,0])
+    set_camera!(env.vis, zoom=1.0, cam_pos=[1,0,0])
 end
 
 # function Base.reset(env::Environment{Vine}; 
