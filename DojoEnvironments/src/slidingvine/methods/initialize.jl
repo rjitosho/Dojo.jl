@@ -26,7 +26,7 @@ function get_slidingvine(;
 
     # Constraints
     jointb1 = JointConstraint(Prototype(basetype, origin, bodies[1], [0.0,1.0,0.0];
-        damper=damper[1], tra_joint_limits = [SA[-.4], SA[.4]]))
+        damper=damper[1], tra_joint_limits = [SA[-.5], SA[.5]]))
     jointb2 = JointConstraint(Prototype(joint_type, bodies[1], bodies[2], ex;
         child_vertex=vert11[1],
         spring=spring[1],
