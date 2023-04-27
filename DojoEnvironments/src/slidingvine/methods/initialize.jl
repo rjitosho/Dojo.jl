@@ -29,9 +29,9 @@ function get_slidingvine(;
         damper=damper[1], tra_joint_limits = [SA[-.5], SA[.5]]))
     jointb2 = JointConstraint(Prototype(joint_type, bodies[1], bodies[2], ex;
         child_vertex=vert11[1],
-        spring=spring[1],
-        rot_spring_offset=SVector(spring_offset[1]),
-        damper=damper[1]))
+        spring=spring[2],
+        rot_spring_offset=SVector(spring_offset[2]),
+        damper=damper[2]))
     if num_bodies > 2
         joints = [JointConstraint(Prototype(joint_type, bodies[i - 1], bodies[i], ex;
             parent_vertex=vert12[i-1], # TODO: does vert12 need to be indexed differently
