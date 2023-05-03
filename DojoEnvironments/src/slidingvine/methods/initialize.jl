@@ -21,7 +21,7 @@ function get_slidingvine(;
 
     # Links
     origin = Origin{T}()
-    bodies = [shape[i] == "shell" ? Shell(r, vine_len[i], mass[i], color=RGBA(0.0, 0.0, 1.0)) : Cylinder(r, vine_len[i], mass[i], color=RGBA(0.0, 0.0, 1.0)) for i = 1:num_bodies-1]
+    bodies = [shape[i] == "shell" ? Shell(r, vine_len[i-1], mass[i], color=RGBA(0.0, 0.0, 1.0)) : Cylinder(r, vine_len[i-1], mass[i], color=RGBA(0.0, 0.0, 1.0)) for i = 2:num_bodies]
     bodies = [Box(box[1], box[2], box[3], mass[1]); bodies]
 
     # Constraints
