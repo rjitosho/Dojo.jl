@@ -27,6 +27,8 @@ include("walker/methods/initialize.jl")
 include("tugbot/methods/initialize.jl")
 include("vine/methods/initialize.jl")
 include("slidingvine/methods/initialize.jl")
+include("flyingvine/methods/initialize.jl")
+include("drone/methods/initialize.jl")
 
 ################################################################################
 # Environments
@@ -45,4 +47,6 @@ include("raiberthopper/methods/env.jl")
 include("rexhopper/methods/env.jl")
 include("vine/methods/env.jl")
 include("slidingvine/methods/env.jl")
+include("flyingvine/methods/env.jl")
+include("drone/methods/env.jl")
 include("walker/methods/env.jl")
