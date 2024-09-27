@@ -40,7 +40,7 @@ function flyingvine(;
     elseif representation == :maximal
         nx = maximal_dimension(mechanism)
     end
-    nu = 6
+    nu = size(control_map, 2)
     no = nx
 
     high = [1.0, 1.0, max_speed]

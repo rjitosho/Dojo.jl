@@ -14,7 +14,8 @@ function get_flyingvine(;
 
     # Parameters
     num_bodies = length(mass)
-    ex = [1.0; 0.0; 0.0]
+    # ex = [1.0; 0.0; 0.0]
+    ex = [0.0; 0.0; 1.0]
     r = 0.0381
     vert11 = [[0.0; 0.0; l / 2.0] for l in vine_len]
     vert12 = [-v for v in vert11]
@@ -28,17 +29,28 @@ function get_flyingvine(;
     jointb1 = JointConstraint(Floating(origin, bodies[1]))
     # jointb1 = JointConstraint(Prototype(basetype, origin, bodies[1], [0.0,1.0,0.0];
     #     damper=damper[1], tra_joint_limits = [SA[-.5], SA[.5]]))
-    jointb2 = JointConstraint(Prototype(joint_type, bodies[1], bodies[2], ex;
+    # jointb2 = JointConstraint(Prototype(joint_type, bodies[1], bodies[2], ex;
+    #     child_vertex=vert11[1],
+    #     spring=spring[2],
+    #     rot_spring_offset=SVector(spring_offset[2]),
+    #     damper=damper[2]))
+    jointb2 = JointConstraint(Orbital(bodies[1], bodies[2], ex;
         child_vertex=vert11[1],
         spring=spring[2],
-        rot_spring_offset=SVector(spring_offset[2]),
+        rot_spring_offset=SVector(spring_offset[2], spring_offset[2]),
         damper=damper[2]))
     if num_bodies > 2
-        joints = [JointConstraint(Prototype(joint_type, bodies[i - 1], bodies[i], ex;
+        # joints = [JointConstraint(Prototype(joint_type, bodies[i - 1], bodies[i], ex;
+        #     parent_vertex=vert12[i-1], # TODO: does vert12 need to be indexed differently
+        #     child_vertex=vert11[i-1],
+        #     spring=spring[i],
+        #     rot_spring_offset=SVector(spring_offset[i]),
+        #     damper=damper[i])) for i = 3:num_bodies]
+        joints = [JointConstraint(Orbital(bodies[i - 1], bodies[i], ex;
             parent_vertex=vert12[i-1], # TODO: does vert12 need to be indexed differently
             child_vertex=vert11[i-1],
             spring=spring[i],
-            rot_spring_offset=SVector(spring_offset[i]),
+            rot_spring_offset=SVector(spring_offset[i], spring_offset[i]),
             damper=damper[i])) for i = 3:num_bodies]
         joints = [jointb1; jointb2; joints]
     else
